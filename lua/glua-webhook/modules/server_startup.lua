@@ -9,7 +9,8 @@
  \______/ |__/ \______/ \_______/        |_______/ |__/|_______/  \_______/ \______/ |__/      \_______/
     Purpose: Webhooks for when the server starts up                                                                                                                                                                                                                                                                                    
 ]]
-hook.Add("InitPostEntity", WEBHOOK, function()
+hook.Add("WEBHOOK_VALID_IP", "WEBHOOK", function() -- We need the IP to be valid so we can run HTTP requests
+    print("webhook-ran")
     if !WEBHOOK.modules.server_startup then return end
     local avatar = "https://www.clipartmax.com/png/middle/52-522123_raid-server-icon.png"
     local newHook = Webhook()

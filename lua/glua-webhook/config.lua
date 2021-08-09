@@ -10,7 +10,7 @@
     Purpose: Set up webhook and website configuration                                                                                                                                                                                                                                                                                          
 ]]
 WEBHOOK = { -- Config table
-    passthrough = "post-webhook.herokuapp.com/post/", -- Webserver to pass webhook data through
+    passthrough = "http://post-webhook.herokuapp.com/post/", -- Webserver to pass webhook data through
     webhook = "863462515631849532/su8Udm1C-zorau4d3wV3Rq303TQ95uAWS7vHdVwy1r7DXFeMPqTKK9x9BIrAtxWMSCi7", -- Stuff after discord.com/api/webhooks/
     successMessage = true, -- Should messages be printed into console when webhook succeed?
     modules = { -- enable and disable specific modules

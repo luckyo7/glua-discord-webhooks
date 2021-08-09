@@ -58,23 +58,30 @@ function Webhook:SetAvatar(avatar)
 end
 
 function Webhook:Send()
-    local user = self:GetUsername()
-    local message = self:GetMessage()
-    local avatar = self:GetAvatar()
+    local user = tostring(self:GetUsername())
+    local message = tostring(self:GetMessage())
+    local avatar = tostring(self:GetAvatar())
+    local webhook = tostring(WEBHOOK.webhook)
 
-    local url = string.format("%s?username=%s&message=%s&webhook=%s&avatar=%s", WEBHOOK.passthrough, name, message, WEBHOOK.webhook, avatar)
-    local function onSuccess()
+    local url = WEBHOOK.passthrough
+    local function onSuccess(code)
         if WEBHOOK.successMessage then
-            MsgC(Color(100, 200, 100), "[GLUA-DISC] Successfully Sent Webhook")
+            MsgC(Color(100, 200, 100), "[GLUA-DISC] Successfully Sent Webhook: " .. tostring(code) .. "\n")
         end
     end
     local function onError(err)
-        MsgC(Color(200, 100, 100), "[GLUA-DISC] Webhook ERROR: " .. err)
+        MsgC(Color(200, 100, 100), "[GLUA-DISC] Webhook ERROR: " .. err .. "\n")
     end
-    http.Post(url, {}, onSuccess, onError)
-end
 
-local newHook = Webhook()
+    local parameters = {
+        username = user,
+        message = message,
+        avatar = avatar,
+        webhook = webhook,
+    }
+    PrintTable(parameters)
+    http.Post(url, parameters, onSuccess, onError)
+end
 
 function findAvatar(id, cb)
     http.Fetch("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=" .. WEBHOOK.APIKEY .. "&steamids=" .. id, 

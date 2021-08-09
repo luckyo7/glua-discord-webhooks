@@ -7,14 +7,14 @@
 | $$  \ $$| $$| $$  | $$/$$__  $$        | $$  | $$| $$ \____  $$| $$      | $$  | $$| $$     | $$  | $$
 |  $$$$$$/| $$|  $$$$$$/  $$$$$$$        | $$$$$$$/| $$ /$$$$$$$/|  $$$$$$$|  $$$$$$/| $$     |  $$$$$$$
  \______/ |__/ \______/ \_______/        |_______/ |__/|_______/  \_______/ \______/ |__/      \_______/
-    Purpose: Autorun file, includes modules                                                                                                                                                                                                                                                                                    
+    Purpose: Serverside hooks for Glua-Discord                                                                                                                                                                                                                                                                                 
 ]]
-if SERVER then
-    include("glua-webhook/config.lua")
-    include("glua-webhook/webhook.lua")
-    include("glua-webhook/sv_hooks.lua")
-    for _, _file in pairs(file.Find("glua-webhook/modules/*.lua", "LUA")) do
-        include("glua-webhook/modules/" .. _file)
-        MsgC(Color(200, 200, 100), "[GLUA-DISC] Included Module: " .. _file .. "\n")
-    end
-end
+local is_valid_ip = false
+local ip
+hook.Add("Think", "WEBHOOK-IP-THINK", function()
+    if is_valid_ip then hook.Remove("Think", "WEBHOOK-IP-THINK") return end -- Make sure to remove think hook so if statement isn't constantly called
+    ip = game.GetIPAddress()
+    if string.StartWith(ip, "0.0.0.0") then return end -- IP is invalid, so return
+    is_valid_ip = true -- We now know the IP is valid
+    hook.Run("WEBHOOK_VALID_IP")
+end)
